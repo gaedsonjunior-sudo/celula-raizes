@@ -579,9 +579,10 @@
         function parseDateLocal(dateString) {
             if (!dateString) return null;
             const [year, month, day] = dateString.split('-').map(Number);
-            return parseDateLocal(year, month - 1, day);
-        }
+            return new Date(year, month - 1, day);
+     }
 
+        
         // CONFIGURAÇÃO DO SUPABASE
         // SUBSTITUA ESTAS CREDENCIAIS PELAS SUAS DO SUPABASE
         const SUPABASE_URL = 'https://gkklvrwmnzufydawchni.supabase.co';
@@ -668,7 +669,7 @@
 
             // Verificar aniversariantes do mês
             const getBirthdaysThisMonth = () => {
-                const currentMonth = parseDateLocal().getMonth();
+                const currentMonth = new Date().getMonth();
                 return members.filter(member => {
                     if (!member.birth_date) return false;
                     const birthMonth = parseDateLocal(member.birth_date).getMonth();
@@ -684,7 +685,7 @@
 
             // Obter próximas 4 escalas
             const getUpcomingEscalas = () => {
-                const today = parseDateLocal();
+                const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 return escalas
                     .filter(e => parseDateLocal(e.date) >= today)
@@ -823,10 +824,10 @@
                                     {members
                                         .filter(m => m.birth_date)
                                         .sort((a, b) => {
-                                            const monthA = parseDateLocal(a.birth_date).getMonth();
-                                            const monthB = parseDateLocal(b.birth_date).getMonth();
+                                            const monthA = new Date(a.birth_date).getMonth();
+                                            const monthB = new Date(b.birth_date).getMonth();
                                             if (monthA !== monthB) return monthA - monthB;
-                                            return parseDateLocal(a.birth_date).getDate() - parseDateLocal(b.birth_date).getDate();
+                                            return new Date(a.birth_date).getDate() - new Date(b.birth_date).getDate();
                                         })
                                         .map((member) => (
                                             <li key={member.id} className="birthday-item">
@@ -1425,7 +1426,7 @@
 
         // Componente de Presença
         function AttendanceTab({ members, attendances, supabase, loadAllData, showMessage }) {
-            const [selectedDate, setSelectedDate] = useState(parseDateLocal().toISOString().split('T')[0]);
+            const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
             const [attendanceList, setAttendanceList] = useState([]);
             const [visitors, setVisitors] = useState('');
 
@@ -1693,8 +1694,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 
