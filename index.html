@@ -11,14 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --verde-raiz: #2d5016;
-            --verde-claro: #4a7c24;
-            --terra: #8b6f47;
-            --bege: #f5f1e8;
-            --creme: #fdfbf7;
-            --dourado: #b8860b;
-            --sombra: rgba(45, 80, 22, 0.1);
-            --vermelho: #c44536;
+            --azul-principal: #1e40af;
+            --azul-claro: #3b82f6;
+            --azul-suave: #60a5fa;
+            --cinza-escuro: #374151;
+            --cinza-medio: #6b7280;
+            --cinza-claro: #e5e7eb;
+            --cinza-bg: #f3f4f6;
+            --branco: #ffffff;
+            --dourado: #f59e0b;
+            --sombra: rgba(30, 64, 175, 0.1);
+            --vermelho: #dc2626;
         }
 
         * {
@@ -29,7 +32,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, var(--creme) 0%, var(--bege) 100%);
+            background: linear-gradient(135deg, var(--branco) 0%, var(--cinza-bg) 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -43,8 +46,8 @@
         .header {
             text-align: center;
             padding: 60px 20px 40px;
-            background: linear-gradient(180deg, rgba(45, 80, 22, 0.03) 0%, transparent 100%);
-            border-bottom: 3px solid var(--verde-raiz);
+            background: linear-gradient(180deg, rgba(30, 64, 175, 0.03) 0%, transparent 100%);
+            border-bottom: 3px solid var(--azul-principal);
             margin-bottom: 40px;
             position: relative;
             overflow: hidden;
@@ -73,7 +76,7 @@
         h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 3.5em;
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
             margin-bottom: 20px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -84,7 +87,7 @@
         .verse {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.1em;
-            color: var(--terra);
+            color: var(--cinza-escuro);
             font-style: italic;
             max-width: 800px;
             margin: 0 auto;
@@ -97,7 +100,7 @@
             display: block;
             margin-top: 15px;
             font-weight: 600;
-            color: var(--verde-claro);
+            color: var(--azul-claro);
             font-style: normal;
             font-size: 0.9em;
         }
@@ -146,34 +149,34 @@
         }
 
         .btn-primary {
-            background: var(--verde-raiz);
+            background: var(--azul-principal);
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--verde-claro);
+            background: var(--azul-claro);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 80, 22, 0.3);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.3);
         }
 
         .btn-secondary {
             background: white;
-            color: var(--verde-raiz);
-            border: 2px solid var(--verde-raiz);
+            color: var(--azul-principal);
+            border: 2px solid var(--azul-principal);
         }
 
         .btn-secondary:hover {
-            background: var(--verde-raiz);
+            background: var(--azul-principal);
             color: white;
         }
 
         .btn-admin {
-            background: var(--terra);
+            background: var(--cinza-escuro);
             color: white;
         }
 
         .btn-admin:hover {
-            background: #6d5836;
+            background: var(--cinza-medio);
         }
 
         .section {
@@ -182,12 +185,12 @@
             border-radius: 20px;
             margin-bottom: 30px;
             box-shadow: 0 10px 40px var(--sombra);
-            border-left: 5px solid var(--verde-raiz);
+            border-left: 5px solid var(--azul-principal);
         }
 
         .section h2 {
             font-family: 'Cormorant Garamond', serif;
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
             font-size: 2.2em;
             margin-bottom: 25px;
             display: flex;
@@ -202,9 +205,9 @@
         .birthday-item, .agenda-item {
             padding: 15px;
             margin-bottom: 12px;
-            background: var(--bege);
+            background: var(--cinza-bg);
             border-radius: 10px;
-            border-left: 4px solid var(--dourado);
+            border-left: 4px solid var(--azul-claro);
             display: flex;
             align-items: center;
             gap: 15px;
@@ -216,7 +219,7 @@
         }
 
         .birthday-item strong, .agenda-item strong {
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
             font-weight: 600;
         }
 
@@ -224,7 +227,7 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            border-top: 4px solid var(--verde-claro);
+            border-top: 4px solid var(--azul-claro);
             margin-bottom: 20px;
             box-shadow: 0 5px 20px var(--sombra);
         }
@@ -232,7 +235,7 @@
         .escala-date {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.8em;
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
             margin-bottom: 20px;
             font-weight: 700;
         }
@@ -244,19 +247,19 @@
         }
 
         .escala-item {
-            background: var(--bege);
+            background: var(--cinza-bg);
             padding: 15px;
             border-radius: 10px;
         }
 
         .escala-item h4 {
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
             font-size: 1em;
             margin-bottom: 8px;
         }
 
         .escala-item p {
-            color: var(--terra);
+            color: var(--cinza-escuro);
             font-weight: 600;
         }
 
@@ -273,7 +276,7 @@
             overflow: hidden;
             box-shadow: 0 5px 20px var(--sombra);
             aspect-ratio: 1;
-            background: var(--bege);
+            background: var(--cinza-bg);
         }
 
         .photo-card img {
@@ -292,7 +295,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(45, 80, 22, 0.9));
+            background: linear-gradient(transparent, rgba(30, 64, 175, 0.9));
             color: white;
             padding: 15px;
             font-size: 0.9em;
@@ -317,14 +320,14 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
             font-weight: 600;
         }
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 2px solid var(--bege);
+            border: 2px solid var(--cinza-claro);
             border-radius: 8px;
             font-family: 'Montserrat', sans-serif;
             font-size: 1em;
@@ -333,7 +336,7 @@
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            border-color: var(--verde-claro);
+            border-color: var(--azul-claro);
         }
 
         .checkbox-group {
@@ -362,7 +365,7 @@
         }
 
         .members-table th {
-            background: var(--verde-raiz);
+            background: var(--azul-principal);
             color: white;
             padding: 15px;
             text-align: left;
@@ -371,11 +374,11 @@
 
         .members-table td {
             padding: 12px 15px;
-            border-bottom: 1px solid var(--bege);
+            border-bottom: 1px solid var(--cinza-claro);
         }
 
         .members-table tr:hover {
-            background: var(--bege);
+            background: var(--cinza-bg);
         }
 
         .action-buttons {
@@ -394,7 +397,7 @@
         }
 
         .btn-edit {
-            background: var(--verde-claro);
+            background: var(--azul-claro);
             color: white;
         }
 
@@ -404,11 +407,11 @@
         }
 
         .btn-edit:hover {
-            background: var(--verde-raiz);
+            background: var(--azul-principal);
         }
 
         .btn-delete:hover {
-            background: #a03629;
+            background: #b91c1c;
         }
 
         .modal {
@@ -439,7 +442,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
-            border-bottom: 2px solid var(--bege);
+            border-bottom: 2px solid var(--cinza-claro);
             flex-wrap: wrap;
         }
 
@@ -450,17 +453,17 @@
             border-bottom: 3px solid transparent;
             cursor: pointer;
             font-weight: 600;
-            color: var(--terra);
+            color: var(--cinza-medio);
             transition: all 0.3s;
         }
 
         .tab.active {
-            color: var(--verde-raiz);
-            border-bottom-color: var(--verde-raiz);
+            color: var(--azul-principal);
+            border-bottom-color: var(--azul-principal);
         }
 
         .tab:hover {
-            color: var(--verde-claro);
+            color: var(--azul-claro);
         }
 
         .attendance-grid {
@@ -471,7 +474,7 @@
         }
 
         .attendance-card {
-            background: var(--bege);
+            background: var(--cinza-bg);
             padding: 15px;
             border-radius: 10px;
             display: flex;
@@ -483,13 +486,13 @@
         }
 
         .attendance-card.present {
-            background: #e8f5e9;
-            border-color: #4caf50;
+            background: #dcfce7;
+            border-color: #22c55e;
         }
 
         .attendance-card.absent {
-            background: #ffebee;
-            border-color: #f44336;
+            background: #fee2e2;
+            border-color: #ef4444;
         }
 
         .attendance-card:hover {
@@ -504,7 +507,7 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--verde-raiz) 0%, var(--verde-claro) 100%);
+            background: linear-gradient(135deg, var(--azul-principal) 0%, var(--azul-claro) 100%);
             color: white;
             padding: 25px;
             border-radius: 15px;
@@ -525,25 +528,25 @@
         .loading {
             text-align: center;
             padding: 40px;
-            color: var(--verde-raiz);
+            color: var(--azul-principal);
         }
 
         .error {
-            background: #ffebee;
-            color: #c62828;
+            background: #fee2e2;
+            color: #991b1b;
             padding: 15px;
             border-radius: 8px;
             margin: 20px 0;
-            border-left: 4px solid #f44336;
+            border-left: 4px solid #ef4444;
         }
 
         .success {
-            background: #e8f5e9;
-            color: #2e7d32;
+            background: #dcfce7;
+            color: #166534;
             padding: 15px;
             border-radius: 8px;
             margin: 20px 0;
-            border-left: 4px solid #4caf50;
+            border-left: 4px solid #22c55e;
         }
 
         @media (max-width: 768px) {
@@ -573,8 +576,8 @@
 
         // CONFIGURAÇÃO DO SUPABASE
         // SUBSTITUA ESTAS CREDENCIAIS PELAS SUAS DO SUPABASE
-        const SUPABASE_URL = 'https://gkklvrwmnzufydawchni.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdra2x2cndtbnp1ZnlkYXdjaG5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NTU1OTQsImV4cCI6MjA4NTQzMTU5NH0.KMJQxbctmMiPFLyEyfFUi8vUrl3VOmLu0_pO8VP3Cis';
+        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE';
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANONIMA_DO_SUPABASE';
         
         let supabase;
         try {
@@ -720,7 +723,7 @@
                         </div>
                         <div className="admin-panel">
                             <div className="login-form">
-                                <h2 style={{ textAlign: 'center', marginBottom: '30px', color: 'var(--verde-raiz)' }}>
+                                <h2 style={{ textAlign: 'center', marginBottom: '30px', color: 'var(--azul-principal)' }}>
                                     Acesso Administrativo
                                 </h2>
                                 <div className="form-group">
@@ -1035,6 +1038,7 @@
                                     <th>Nascimento</th>
                                     <th>Batismo</th>
                                     <th>Encontro</th>
+                                    <th>Cursos</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -1046,6 +1050,11 @@
                                         <td>{member.birth_date ? new Date(member.birth_date).toLocaleDateString('pt-BR') : '-'}</td>
                                         <td>{member.baptism}</td>
                                         <td>{member.encontro}</td>
+                                        <td>
+                                            {member.courses && member.courses.length > 0 
+                                                ? member.courses.join(', ') 
+                                                : '-'}
+                                        </td>
                                         <td>
                                             <div className="action-buttons">
                                                 <button className="btn btn-small btn-edit" onClick={() => {
@@ -1069,7 +1078,7 @@
                     {showModal && (
                         <div className="modal" onClick={() => { setShowModal(false); resetForm(); }}>
                             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                                <h2 style={{ marginBottom: '30px', color: 'var(--verde-raiz)' }}>
+                                <h2 style={{ marginBottom: '30px', color: 'var(--azul-principal)' }}>
                                     {editing ? 'Editar Membro' : 'Novo Membro'}
                                 </h2>
 
@@ -1171,20 +1180,20 @@
 
             return (
                 <div>
-                    <h3 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Gerenciar Agenda</h3>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--azul-principal)' }}>Gerenciar Agenda</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: '10px', marginBottom: '30px' }}>
                         <input
                             type="date"
                             value={form.date}
                             onChange={(e) => setForm({ ...form, date: e.target.value })}
-                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--cinza-claro)' }}
                         />
                         <input
                             type="text"
                             placeholder="Descrição do evento"
                             value={form.description}
                             onChange={(e) => setForm({ ...form, description: e.target.value })}
-                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--cinza-claro)' }}
                         />
                         <button className="btn btn-primary" onClick={handleAdd}>Adicionar</button>
                     </div>
@@ -1297,7 +1306,7 @@
                     {showModal && (
                         <div className="modal" onClick={() => { setShowModal(false); resetForm(); }}>
                             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                                <h2 style={{ marginBottom: '30px', color: 'var(--verde-raiz)' }}>
+                                <h2 style={{ marginBottom: '30px', color: 'var(--azul-principal)' }}>
                                     {editing ? 'Editar Escala' : 'Nova Escala'}
                                 </h2>
 
@@ -1370,21 +1379,21 @@
 
             return (
                 <div>
-                    <h3 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Gerenciar Fotos</h3>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--azul-principal)' }}>Gerenciar Fotos</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr auto', gap: '10px', marginBottom: '30px' }}>
                         <input
                             type="text"
                             placeholder="URL da imagem"
                             value={form.url}
                             onChange={(e) => setForm({ ...form, url: e.target.value })}
-                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--cinza-claro)' }}
                         />
                         <input
                             type="text"
                             placeholder="Legenda"
                             value={form.caption}
                             onChange={(e) => setForm({ ...form, caption: e.target.value })}
-                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--cinza-claro)' }}
                         />
                         <button className="btn btn-primary" onClick={handleAdd}>Adicionar</button>
                     </div>
@@ -1459,7 +1468,7 @@
 
             return (
                 <div>
-                    <h3 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Chamada de Presença</h3>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--azul-principal)' }}>Chamada de Presença</h3>
                     
                     <div className="form-group">
                         <label>Data da Célula:</label>
@@ -1470,7 +1479,7 @@
                         />
                     </div>
 
-                    <h4 style={{ marginTop: '30px', marginBottom: '15px', color: 'var(--verde-raiz)' }}>
+                    <h4 style={{ marginTop: '30px', marginBottom: '15px', color: 'var(--azul-principal)' }}>
                         Membros Cadastrados
                     </h4>
 
@@ -1565,9 +1574,9 @@
 
             return (
                 <div>
-                    <h3 style={{ marginBottom: '30px', color: 'var(--verde-raiz)' }}>📊 Relatórios e Estatísticas</h3>
+                    <h3 style={{ marginBottom: '30px', color: 'var(--azul-principal)' }}>📊 Relatórios e Estatísticas</h3>
 
-                    <h4 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Médias Gerais</h4>
+                    <h4 style={{ marginBottom: '20px', color: 'var(--azul-principal)' }}>Médias Gerais</h4>
                     <div className="stats-grid">
                         <div className="stat-card">
                             <h3>{stats.avgAttendance}</h3>
@@ -1595,7 +1604,7 @@
                         </div>
                     </div>
 
-                    <h4 style={{ marginTop: '40px', marginBottom: '20px', color: 'var(--verde-raiz)' }}>
+                    <h4 style={{ marginTop: '40px', marginBottom: '20px', color: 'var(--azul-principal)' }}>
                         Presença por Membro
                     </h4>
                     <div className="members-table">
@@ -1631,7 +1640,7 @@
                         </table>
                     </div>
 
-                    <h4 style={{ marginTop: '40px', marginBottom: '20px', color: 'var(--verde-raiz)' }}>
+                    <h4 style={{ marginTop: '40px', marginBottom: '20px', color: 'var(--azul-principal)' }}>
                         Histórico de Reuniões
                     </h4>
                     <div className="members-table">
@@ -1675,6 +1684,4 @@
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
-
 </html>
-
