@@ -576,6 +576,12 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        function parseDateLocal(dateString) {
+            if (!dateString) return null;
+            const [year, month, day] = dateString.split('-').map(Number);
+            return parseDateLocal(year, month - 1, day);
+        }
+
         // CONFIGURAÇÃO DO SUPABASE
         // SUBSTITUA ESTAS CREDENCIAIS PELAS SUAS DO SUPABASE
         const SUPABASE_URL = 'https://gkklvrwmnzufydawchni.supabase.co';
@@ -662,14 +668,14 @@
 
             // Verificar aniversariantes do mês
             const getBirthdaysThisMonth = () => {
-                const currentMonth = new Date().getMonth();
+                const currentMonth = parseDateLocal().getMonth();
                 return members.filter(member => {
                     if (!member.birth_date) return false;
-                    const birthMonth = new Date(member.birth_date).getMonth();
+                    const birthMonth = parseDateLocal(member.birth_date).getMonth();
                     return birthMonth === currentMonth;
                 }).sort((a, b) => {
-                    const dayA = new Date(a.birth_date).getDate();
-                    const dayB = new Date(b.birth_date).getDate();
+                    const dayA = parseDateLocal(a.birth_date).getDate();
+                    const dayB = parseDateLocal(b.birth_date).getDate();
                     return dayA - dayB;
                 });
             };
@@ -678,10 +684,10 @@
 
             // Obter próximas 4 escalas
             const getUpcomingEscalas = () => {
-                const today = new Date();
+                const today = parseDateLocal();
                 today.setHours(0, 0, 0, 0);
                 return escalas
-                    .filter(e => new Date(e.date) >= today)
+                    .filter(e => parseDateLocal(e.date) >= today)
                     .slice(0, 4);
             };
 
@@ -817,14 +823,14 @@
                                     {members
                                         .filter(m => m.birth_date)
                                         .sort((a, b) => {
-                                            const monthA = new Date(a.birth_date).getMonth();
-                                            const monthB = new Date(b.birth_date).getMonth();
+                                            const monthA = parseDateLocal(a.birth_date).getMonth();
+                                            const monthB = parseDateLocal(b.birth_date).getMonth();
                                             if (monthA !== monthB) return monthA - monthB;
-                                            return new Date(a.birth_date).getDate() - new Date(b.birth_date).getDate();
+                                            return parseDateLocal(a.birth_date).getDate() - parseDateLocal(b.birth_date).getDate();
                                         })
                                         .map((member) => (
                                             <li key={member.id} className="birthday-item">
-                                                🎉 <strong>{member.name}</strong> - {new Date(member.birth_date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
+                                                🎉 <strong>{member.name}</strong> - {parseDateLocal(member.birth_date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
                                             </li>
                                         ))
                                     }
@@ -842,7 +848,7 @@
                                 <ul className="agenda-list">
                                     {agenda.map((item) => (
                                         <li key={item.id} className="agenda-item">
-                                            📌 <strong>{new Date(item.date).toLocaleDateString('pt-BR')}</strong> - {item.description}
+                                            📌 <strong>{parseDateLocal(item.date).toLocaleDateString('pt-BR')}</strong> - {item.description}
                                         </li>
                                     ))}
                                 </ul>
@@ -859,7 +865,7 @@
                                 getUpcomingEscalas().map((escala) => (
                                     <div key={escala.id} className="escala-card">
                                         <div className="escala-date">
-                                            📅 {new Date(escala.date).toLocaleDateString('pt-BR', { 
+                                            📅 {parseDateLocal(escala.date).toLocaleDateString('pt-BR', { 
                                                 weekday: 'long', 
                                                 year: 'numeric', 
                                                 month: 'long', 
@@ -1049,7 +1055,7 @@
                                     <tr key={member.id}>
                                         <td>{member.name}</td>
                                         <td>{member.type}</td>
-                                        <td>{member.birth_date ? new Date(member.birth_date).toLocaleDateString('pt-BR') : '-'}</td>
+                                        <td>{member.birth_date ? parseDateLocal(member.birth_date).toLocaleDateString('pt-BR') : '-'}</td>
                                         <td>{member.baptism}</td>
                                         <td>{member.encontro}</td>
                                         <td>
@@ -1203,7 +1209,7 @@
                     <ul className="agenda-list">
                         {agenda.map((item) => (
                             <li key={item.id} className="agenda-item" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span>📌 <strong>{new Date(item.date).toLocaleDateString('pt-BR')}</strong> - {item.description}</span>
+                                <span>📌 <strong>{parseDateLocal(item.date).toLocaleDateString('pt-BR')}</strong> - {item.description}</span>
                                 <button className="btn btn-small btn-delete" onClick={() => handleDelete(item.id)}>Excluir</button>
                             </li>
                         ))}
@@ -1269,7 +1275,7 @@
                         <div key={escala.id} className="escala-card">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
                                 <div className="escala-date" style={{ marginBottom: 0 }}>
-                                    📅 {new Date(escala.date).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                    📅 {parseDateLocal(escala.date).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                                 </div>
                                 <div className="action-buttons">
                                     <button className="btn btn-small btn-edit" onClick={() => {
@@ -1419,7 +1425,7 @@
 
         // Componente de Presença
         function AttendanceTab({ members, attendances, supabase, loadAllData, showMessage }) {
-            const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+            const [selectedDate, setSelectedDate] = useState(parseDateLocal().toISOString().split('T')[0]);
             const [attendanceList, setAttendanceList] = useState([]);
             const [visitors, setVisitors] = useState('');
 
@@ -1668,7 +1674,7 @@
 
                                     return (
                                         <tr key={att.id}>
-                                            <td>{new Date(att.date).toLocaleDateString('pt-BR')}</td>
+                                            <td>{parseDateLocal(att.date).toLocaleDateString('pt-BR')}</td>
                                             <td><strong>{presentCount}</strong></td>
                                             <td>{memberCount}</td>
                                             <td>{faCount}</td>
@@ -1687,6 +1693,7 @@
     </script>
 </body>
 </html>
+
 
 
 
