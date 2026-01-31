@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Célula Raízes</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-raiz: #2d5016;
+            --verde-claro: #4a7c24;
+            --terra: #8b6f47;
+            --bege: #f5f1e8;
+            --creme: #fdfbf7;
+            --dourado: #b8860b;
+            --sombra: rgba(45, 80, 22, 0.1);
+            --vermelho: #c44536;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--creme) 0%, var(--bege) 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, rgba(45, 80, 22, 0.03) 0%, transparent 100%);
+            border-bottom: 3px solid var(--verde-raiz);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🌱';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.05;
+            top: -50px;
+            right: -50px;
+            transform: rotate(-15deg);
+        }
+
+        .header::after {
+            content: '🌱';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.05;
+            bottom: -50px;
+            left: -50px;
+            transform: rotate(15deg);
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5em;
+            color: var(--verde-raiz);
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .verse {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1em;
+            color: var(--terra);
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .verse-ref {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--verde-claro);
+            font-style: normal;
+            font-size: 0.9em;
+        }
+
+        .alert-birthday {
+            background: linear-gradient(135deg, var(--dourado) 0%, #d4af37 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .alert-birthday h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--sombra);
+        }
+
+        .btn-primary {
+            background: var(--verde-raiz);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--verde-claro);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 80, 22, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--verde-raiz);
+            border: 2px solid var(--verde-raiz);
+        }
+
+        .btn-secondary:hover {
+            background: var(--verde-raiz);
+            color: white;
+        }
+
+        .btn-admin {
+            background: var(--terra);
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background: #6d5836;
+        }
+
+        .section {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px var(--sombra);
+            border-left: 5px solid var(--verde-raiz);
+        }
+
+        .section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--verde-raiz);
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .birthday-list, .agenda-list {
+            list-style: none;
+        }
+
+        .birthday-item, .agenda-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: var(--bege);
+            border-radius: 10px;
+            border-left: 4px solid var(--dourado);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s;
+        }
+
+        .birthday-item:hover, .agenda-item:hover {
+            transform: translateX(5px);
+        }
+
+        .birthday-item strong, .agenda-item strong {
+            color: var(--verde-raiz);
+            font-weight: 600;
+        }
+
+        .escala-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border-top: 4px solid var(--verde-claro);
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px var(--sombra);
+        }
+
+        .escala-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: var(--verde-raiz);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .escala-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .escala-item {
+            background: var(--bege);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .escala-item h4 {
+            color: var(--verde-raiz);
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .escala-item p {
+            color: var(--terra);
+            font-weight: 600;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--sombra);
+            aspect-ratio: 1;
+            background: var(--bege);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(45, 80, 22, 0.9));
+            color: white;
+            padding: 15px;
+            font-size: 0.9em;
+        }
+
+        .admin-panel {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--sombra);
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--verde-raiz);
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--bege);
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--verde-claro);
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+        }
+
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .members-table table {
+            width: 100%;
+        }
+
+        .members-table th {
+            background: var(--verde-raiz);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .members-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--bege);
+        }
+
+        .members-table tr:hover {
+            background: var(--bege);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: var(--verde-claro);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--vermelho);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: var(--verde-raiz);
+        }
+
+        .btn-delete:hover {
+            background: #a03629;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--bege);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--terra);
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--verde-raiz);
+            border-bottom-color: var(--verde-raiz);
+        }
+
+        .tab:hover {
+            color: var(--verde-claro);
+        }
+
+        .attendance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .attendance-card {
+            background: var(--bege);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .attendance-card.present {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .attendance-card.absent {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+
+        .attendance-card:hover {
+            transform: scale(1.02);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--verde-raiz) 0%, var(--verde-claro) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px var(--sombra);
+        }
+
+        .stat-card h3 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--verde-raiz);
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #f44336;
+        }
+
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .escala-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-panel {
+                padding: 20px;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // CONFIGURAÇÃO DO SUPABASE
+        // SUBSTITUA ESTAS CREDENCIAIS PELAS SUAS DO SUPABASE
+        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE';
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANONIMA_DO_SUPABASE';
+        
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (error) {
+            console.error('Erro ao conectar com Supabase:', error);
+        }
+
+        // Senha padrão: "celula123"
+        const ADMIN_PASSWORD = "celula123";
+
+        function App() {
+            const [isAdmin, setIsAdmin] = useState(false);
+            const [showLogin, setShowLogin] = useState(false);
+            const [password, setPassword] = useState("");
+            const [currentView, setCurrentView] = useState("home");
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            
+            // Estados dos dados
+            const [members, setMembers] = useState([]);
+            const [agenda, setAgenda] = useState([]);
+            const [escalas, setEscalas] = useState([]);
+            const [photos, setPhotos] = useState([]);
+            const [attendances, setAttendances] = useState([]);
+
+            useEffect(() => {
+                checkSupabaseConfig();
+                loadAllData();
+            }, []);
+
+            const checkSupabaseConfig = () => {
+                if (!SUPABASE_URL || SUPABASE_URL === 'SUA_URL_DO_SUPABASE') {
+                    setError('Por favor, configure as credenciais do Supabase no código.');
+                    setLoading(false);
+                }
+            };
+
+            const loadAllData = async () => {
+                try {
+                    setLoading(true);
+                    
+                    const [membersRes, agendaRes, escalasRes, photosRes, attendancesRes] = await Promise.all([
+                        supabase.from('members').select('*').order('name'),
+                        supabase.from('agenda').select('*').order('date'),
+                        supabase.from('escalas').select('*').order('date'),
+                        supabase.from('photos').select('*').order('created_at', { ascending: false }),
+                        supabase.from('attendances').select('*').order('date', { ascending: false })
+                    ]);
+
+                    if (membersRes.data) setMembers(membersRes.data);
+                    if (agendaRes.data) setAgenda(agendaRes.data);
+                    if (escalasRes.data) setEscalas(escalasRes.data);
+                    if (photosRes.data) setPhotos(photosRes.data);
+                    if (attendancesRes.data) setAttendances(attendancesRes.data);
+
+                    setError(null);
+                } catch (err) {
+                    console.error('Erro ao carregar dados:', err);
+                    setError('Erro ao carregar dados. Verifique a conexão com o Supabase.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleLogin = () => {
+                if (password === ADMIN_PASSWORD) {
+                    setIsAdmin(true);
+                    setShowLogin(false);
+                    setPassword("");
+                } else {
+                    alert("Senha incorreta!");
+                }
+            };
+
+            const handleLogout = () => {
+                setIsAdmin(false);
+                setCurrentView("home");
+            };
+
+            // Verificar aniversariantes do mês
+            const getBirthdaysThisMonth = () => {
+                const currentMonth = new Date().getMonth();
+                return members.filter(member => {
+                    if (!member.birth_date) return false;
+                    const birthMonth = new Date(member.birth_date).getMonth();
+                    return birthMonth === currentMonth;
+                }).sort((a, b) => {
+                    const dayA = new Date(a.birth_date).getDate();
+                    const dayB = new Date(b.birth_date).getDate();
+                    return dayA - dayB;
+                });
+            };
+
+            const birthdaysThisMonth = getBirthdaysThisMonth();
+
+            // Obter próximas 4 escalas
+            const getUpcomingEscalas = () => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return escalas
+                    .filter(e => new Date(e.date) >= today)
+                    .slice(0, 4);
+            };
+
+            if (loading) {
+                return (
+                    <div className="container">
+                        <div className="loading">
+                            <h2>🌱 Carregando Célula Raízes...</h2>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (error && !isAdmin) {
+                return (
+                    <div className="container">
+                        <div className="header">
+                            <h1>Célula Raízes 🌱</h1>
+                        </div>
+                        <div className="error">
+                            <strong>⚠️ Erro de Configuração</strong>
+                            <p>{error}</p>
+                            <p style={{ marginTop: '10px' }}>
+                                Configure suas credenciais do Supabase no arquivo index.html
+                            </p>
+                        </div>
+                        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                            <button className="btn btn-admin" onClick={() => setShowLogin(true)}>
+                                🔐 Acesso Admin
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (showLogin) {
+                return (
+                    <div className="container">
+                        <div className="header">
+                            <h1>Célula Raízes</h1>
+                        </div>
+                        <div className="admin-panel">
+                            <div className="login-form">
+                                <h2 style={{ textAlign: 'center', marginBottom: '30px', color: 'var(--verde-raiz)' }}>
+                                    Acesso Administrativo
+                                </h2>
+                                <div className="form-group">
+                                    <label>Senha:</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                                        placeholder="Digite a senha"
+                                    />
+                                </div>
+                                <button className="btn btn-primary" style={{ width: '100%', marginBottom: '10px' }} onClick={handleLogin}>
+                                    Entrar
+                                </button>
+                                <button className="btn btn-secondary" style={{ width: '100%' }} onClick={() => setShowLogin(false)}>
+                                    Voltar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (isAdmin) {
+                return <AdminPanel 
+                    members={members}
+                    agenda={agenda}
+                    escalas={escalas}
+                    photos={photos}
+                    attendances={attendances}
+                    onLogout={handleLogout}
+                    loadAllData={loadAllData}
+                    supabase={supabase}
+                />;
+            }
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>Célula Raízes 🌱</h1>
+                        <div className="verse">
+                            "Bendito o homem que confia no Senhor e cuja esperança é o Senhor. Porque ele é como a árvore plantada junto às águas, que estende as suas raízes para o ribeiro e não receia quando vem o calor, mas a sua folha fica verde; e, no ano de sequidão, não se perturba, nem deixa de dar fruto."
+                            <span className="verse-ref">Jeremias 17:7-8</span>
+                        </div>
+                        <div className="verse" style={{ marginTop: '20px' }}>
+                            "Portanto, assim como recebestes Cristo Jesus, o Senhor, assim andai nele, arraigados e edificados nele e confirmados na fé, assim como fostes ensinados, crescendo em ações de graças."
+                            <span className="verse-ref">Colossenses 2:6-7</span>
+                        </div>
+                    </div>
+
+                    {birthdaysThisMonth.length > 0 && (
+                        <div className="alert-birthday">
+                            <h3>🎂 Aniversariantes do Mês! 🎉</h3>
+                            <p>
+                                {birthdaysThisMonth.map(m => m.name).join(', ')}
+                            </p>
+                        </div>
+                    )}
+
+                    <div className="nav-buttons">
+                        <button className="btn btn-primary" onClick={() => setCurrentView("home")}>
+                            Início
+                        </button>
+                        <button className="btn btn-primary" onClick={() => setCurrentView("birthdays")}>
+                            Aniversariantes
+                        </button>
+                        <button className="btn btn-primary" onClick={() => setCurrentView("agenda")}>
+                            Agenda
+                        </button>
+                        <button className="btn btn-primary" onClick={() => setCurrentView("escala")}>
+                            Escalas
+                        </button>
+                        <button className="btn btn-primary" onClick={() => setCurrentView("photos")}>
+                            Fotos
+                        </button>
+                        <button className="btn btn-admin" onClick={() => setShowLogin(true)}>
+                            🔐 Admin
+                        </button>
+                    </div>
+
+                    {currentView === "birthdays" && (
+                        <div className="section">
+                            <h2>🎂 Aniversariantes</h2>
+                            {members.filter(m => m.birth_date).length === 0 ? (
+                                <p>Nenhum aniversariante cadastrado.</p>
+                            ) : (
+                                <ul className="birthday-list">
+                                    {members
+                                        .filter(m => m.birth_date)
+                                        .sort((a, b) => {
+                                            const monthA = new Date(a.birth_date).getMonth();
+                                            const monthB = new Date(b.birth_date).getMonth();
+                                            if (monthA !== monthB) return monthA - monthB;
+                                            return new Date(a.birth_date).getDate() - new Date(b.birth_date).getDate();
+                                        })
+                                        .map((member) => (
+                                            <li key={member.id} className="birthday-item">
+                                                🎉 <strong>{member.name}</strong> - {new Date(member.birth_date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                            )}
+                        </div>
+                    )}
+
+                    {currentView === "agenda" && (
+                        <div className="section">
+                            <h2>📅 Agenda</h2>
+                            {agenda.length === 0 ? (
+                                <p>Nenhum evento agendado.</p>
+                            ) : (
+                                <ul className="agenda-list">
+                                    {agenda.map((item) => (
+                                        <li key={item.id} className="agenda-item">
+                                            📌 <strong>{new Date(item.date).toLocaleDateString('pt-BR')}</strong> - {item.description}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    )}
+
+                    {currentView === "escala" && (
+                        <div className="section">
+                            <h2>📋 Próximas Escalas</h2>
+                            {getUpcomingEscalas().length === 0 ? (
+                                <p>Nenhuma escala cadastrada.</p>
+                            ) : (
+                                getUpcomingEscalas().map((escala) => (
+                                    <div key={escala.id} className="escala-card">
+                                        <div className="escala-date">
+                                            📅 {new Date(escala.date).toLocaleDateString('pt-BR', { 
+                                                weekday: 'long', 
+                                                year: 'numeric', 
+                                                month: 'long', 
+                                                day: 'numeric' 
+                                            })}
+                                        </div>
+                                        <div className="escala-grid">
+                                            <div className="escala-item">
+                                                <h4>🤝 Quebra-Gelo</h4>
+                                                <p>{escala.quebra_gelo || "A definir"}</p>
+                                            </div>
+                                            <div className="escala-item">
+                                                <h4>🎵 Louvor</h4>
+                                                <p>{escala.louvor || "A definir"}</p>
+                                            </div>
+                                            <div className="escala-item">
+                                                <h4>🍰 Lanche</h4>
+                                                <p>{escala.lanche || "A definir"}</p>
+                                            </div>
+                                            <div className="escala-item">
+                                                <h4>📱 Mídia</h4>
+                                                <p>{escala.midia || "A definir"}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    )}
+
+                    {currentView === "photos" && (
+                        <div className="section">
+                            <h2>📸 Fotos das Últimas Células</h2>
+                            {photos.length === 0 ? (
+                                <p>Nenhuma foto publicada ainda.</p>
+                            ) : (
+                                <div className="photos-grid">
+                                    {photos.map((photo) => (
+                                        <div key={photo.id} className="photo-card">
+                                            <img src={photo.url} alt={photo.caption} />
+                                            <div className="photo-caption">{photo.caption}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function AdminPanel({ members, agenda, escalas, photos, attendances, onLogout, loadAllData, supabase }) {
+            const [activeTab, setActiveTab] = useState("members");
+            const [message, setMessage] = useState(null);
+
+            const showMessage = (msg, type = 'success') => {
+                setMessage({ text: msg, type });
+                setTimeout(() => setMessage(null), 3000);
+            };
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>Painel Administrativo 🔐</h1>
+                        <button className="btn btn-secondary" onClick={onLogout} style={{ marginTop: '20px' }}>
+                            Sair do Admin
+                        </button>
+                    </div>
+
+                    {message && (
+                        <div className={message.type === 'success' ? 'success' : 'error'}>
+                            {message.text}
+                        </div>
+                    )}
+
+                    <div className="admin-panel">
+                        <div className="tabs">
+                            <button className={`tab ${activeTab === 'members' ? 'active' : ''}`} onClick={() => setActiveTab('members')}>
+                                👥 Membros
+                            </button>
+                            <button className={`tab ${activeTab === 'agenda' ? 'active' : ''}`} onClick={() => setActiveTab('agenda')}>
+                                📅 Agenda
+                            </button>
+                            <button className={`tab ${activeTab === 'escalas' ? 'active' : ''}`} onClick={() => setActiveTab('escalas')}>
+                                📋 Escalas
+                            </button>
+                            <button className={`tab ${activeTab === 'photos' ? 'active' : ''}`} onClick={() => setActiveTab('photos')}>
+                                📸 Fotos
+                            </button>
+                            <button className={`tab ${activeTab === 'attendance' ? 'active' : ''}`} onClick={() => setActiveTab('attendance')}>
+                                ✅ Presenças
+                            </button>
+                            <button className={`tab ${activeTab === 'reports' ? 'active' : ''}`} onClick={() => setActiveTab('reports')}>
+                                📊 Relatórios
+                            </button>
+                        </div>
+
+                        {activeTab === 'members' && <MembersTab members={members} supabase={supabase} loadAllData={loadAllData} showMessage={showMessage} />}
+                        {activeTab === 'agenda' && <AgendaTab agenda={agenda} supabase={supabase} loadAllData={loadAllData} showMessage={showMessage} />}
+                        {activeTab === 'escalas' && <EscalasTab escalas={escalas} supabase={supabase} loadAllData={loadAllData} showMessage={showMessage} />}
+                        {activeTab === 'photos' && <PhotosTab photos={photos} supabase={supabase} loadAllData={loadAllData} showMessage={showMessage} />}
+                        {activeTab === 'attendance' && <AttendanceTab members={members} attendances={attendances} supabase={supabase} loadAllData={loadAllData} showMessage={showMessage} />}
+                        {activeTab === 'reports' && <ReportsTab members={members} attendances={attendances} />}
+                    </div>
+                </div>
+            );
+        }
+
+        // Componente de Membros
+        function MembersTab({ members, supabase, loadAllData, showMessage }) {
+            const [showModal, setShowModal] = useState(false);
+            const [editing, setEditing] = useState(null);
+            const [form, setForm] = useState({
+                name: '', type: 'Membro', birth_date: '', baptism: 'Não',
+                encontro: 'Não', courses: []
+            });
+
+            const handleSave = async () => {
+                if (!form.name) {
+                    showMessage('Preencha o nome do membro', 'error');
+                    return;
+                }
+
+                try {
+                    if (editing) {
+                        await supabase.from('members').update(form).eq('id', editing.id);
+                        showMessage('Membro atualizado com sucesso!');
+                    } else {
+                        await supabase.from('members').insert([form]);
+                        showMessage('Membro adicionado com sucesso!');
+                    }
+                    await loadAllData();
+                    setShowModal(false);
+                    resetForm();
+                } catch (error) {
+                    showMessage('Erro ao salvar membro', 'error');
+                }
+            };
+
+            const handleDelete = async (id) => {
+                if (confirm('Tem certeza que deseja excluir este membro?')) {
+                    try {
+                        await supabase.from('members').delete().eq('id', id);
+                        showMessage('Membro excluído com sucesso!');
+                        await loadAllData();
+                    } catch (error) {
+                        showMessage('Erro ao excluir membro', 'error');
+                    }
+                }
+            };
+
+            const resetForm = () => {
+                setForm({ name: '', type: 'Membro', birth_date: '', baptism: 'Não', encontro: 'Não', courses: [] });
+                setEditing(null);
+            };
+
+            const toggleCourse = (course) => {
+                const courses = form.courses || [];
+                if (courses.includes(course)) {
+                    setForm({ ...form, courses: courses.filter(c => c !== course) });
+                } else {
+                    setForm({ ...form, courses: [...courses, course] });
+                }
+            };
+
+            return (
+                <div>
+                    <button className="btn btn-primary" onClick={() => setShowModal(true)} style={{ marginBottom: '20px' }}>
+                        + Novo Membro
+                    </button>
+
+                    <div className="members-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Tipo</th>
+                                    <th>Nascimento</th>
+                                    <th>Batismo</th>
+                                    <th>Encontro</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {members.map(member => (
+                                    <tr key={member.id}>
+                                        <td>{member.name}</td>
+                                        <td>{member.type}</td>
+                                        <td>{member.birth_date ? new Date(member.birth_date).toLocaleDateString('pt-BR') : '-'}</td>
+                                        <td>{member.baptism}</td>
+                                        <td>{member.encontro}</td>
+                                        <td>
+                                            <div className="action-buttons">
+                                                <button className="btn btn-small btn-edit" onClick={() => {
+                                                    setEditing(member);
+                                                    setForm(member);
+                                                    setShowModal(true);
+                                                }}>
+                                                    Editar
+                                                </button>
+                                                <button className="btn btn-small btn-delete" onClick={() => handleDelete(member.id)}>
+                                                    Excluir
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {showModal && (
+                        <div className="modal" onClick={() => { setShowModal(false); resetForm(); }}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <h2 style={{ marginBottom: '30px', color: 'var(--verde-raiz)' }}>
+                                    {editing ? 'Editar Membro' : 'Novo Membro'}
+                                </h2>
+
+                                <div className="form-group">
+                                    <label>Nome Completo:</label>
+                                    <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Tipo:</label>
+                                    <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
+                                        <option>Membro</option>
+                                        <option>FA</option>
+                                        <option>Visitante</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Data de Nascimento:</label>
+                                    <input type="date" value={form.birth_date} onChange={(e) => setForm({ ...form, birth_date: e.target.value })} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Batismo:</label>
+                                    <select value={form.baptism} onChange={(e) => setForm({ ...form, baptism: e.target.value })}>
+                                        <option>Não</option>
+                                        <option>Videira</option>
+                                        <option>Outra Igreja</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Encontro com Deus:</label>
+                                    <select value={form.encontro} onChange={(e) => setForm({ ...form, encontro: e.target.value })}>
+                                        <option>Não</option>
+                                        <option>Sim</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Cursos:</label>
+                                    <div className="checkbox-group">
+                                        {['Ceifeiros', 'Maturidade', 'CTL', 'Pastoral'].map(course => (
+                                            <label key={course}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={form.courses?.includes(course)}
+                                                    onChange={() => toggleCourse(course)}
+                                                />
+                                                {course}
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '10px', marginTop: '30px' }}>
+                                    <button className="btn btn-primary" onClick={handleSave} style={{ flex: 1 }}>
+                                        Salvar
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={() => { setShowModal(false); resetForm(); }} style={{ flex: 1 }}>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Componente de Agenda
+        function AgendaTab({ agenda, supabase, loadAllData, showMessage }) {
+            const [form, setForm] = useState({ date: '', description: '' });
+
+            const handleAdd = async () => {
+                if (!form.date || !form.description) {
+                    showMessage('Preencha data e descrição', 'error');
+                    return;
+                }
+                try {
+                    await supabase.from('agenda').insert([form]);
+                    showMessage('Evento adicionado com sucesso!');
+                    setForm({ date: '', description: '' });
+                    await loadAllData();
+                } catch (error) {
+                    showMessage('Erro ao adicionar evento', 'error');
+                }
+            };
+
+            const handleDelete = async (id) => {
+                try {
+                    await supabase.from('agenda').delete().eq('id', id);
+                    showMessage('Evento excluído com sucesso!');
+                    await loadAllData();
+                } catch (error) {
+                    showMessage('Erro ao excluir evento', 'error');
+                }
+            };
+
+            return (
+                <div>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Gerenciar Agenda</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: '10px', marginBottom: '30px' }}>
+                        <input
+                            type="date"
+                            value={form.date}
+                            onChange={(e) => setForm({ ...form, date: e.target.value })}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Descrição do evento"
+                            value={form.description}
+                            onChange={(e) => setForm({ ...form, description: e.target.value })}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                        />
+                        <button className="btn btn-primary" onClick={handleAdd}>Adicionar</button>
+                    </div>
+
+                    <ul className="agenda-list">
+                        {agenda.map((item) => (
+                            <li key={item.id} className="agenda-item" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span>📌 <strong>{new Date(item.date).toLocaleDateString('pt-BR')}</strong> - {item.description}</span>
+                                <button className="btn btn-small btn-delete" onClick={() => handleDelete(item.id)}>Excluir</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        // Componente de Escalas
+        function EscalasTab({ escalas, supabase, loadAllData, showMessage }) {
+            const [showModal, setShowModal] = useState(false);
+            const [editing, setEditing] = useState(null);
+            const [form, setForm] = useState({
+                date: '', quebra_gelo: '', louvor: '', lanche: '', midia: ''
+            });
+
+            const handleSave = async () => {
+                if (!form.date) {
+                    showMessage('Preencha a data da escala', 'error');
+                    return;
+                }
+
+                try {
+                    if (editing) {
+                        await supabase.from('escalas').update(form).eq('id', editing.id);
+                        showMessage('Escala atualizada com sucesso!');
+                    } else {
+                        await supabase.from('escalas').insert([form]);
+                        showMessage('Escala adicionada com sucesso!');
+                    }
+                    await loadAllData();
+                    setShowModal(false);
+                    resetForm();
+                } catch (error) {
+                    showMessage('Erro ao salvar escala', 'error');
+                }
+            };
+
+            const handleDelete = async (id) => {
+                if (confirm('Tem certeza que deseja excluir esta escala?')) {
+                    try {
+                        await supabase.from('escalas').delete().eq('id', id);
+                        showMessage('Escala excluída com sucesso!');
+                        await loadAllData();
+                    } catch (error) {
+                        showMessage('Erro ao excluir escala', 'error');
+                    }
+                }
+            };
+
+            const resetForm = () => {
+                setForm({ date: '', quebra_gelo: '', louvor: '', lanche: '', midia: '' });
+                setEditing(null);
+            };
+
+            return (
+                <div>
+                    <button className="btn btn-primary" onClick={() => setShowModal(true)} style={{ marginBottom: '20px' }}>
+                        + Nova Escala
+                    </button>
+
+                    {escalas.map((escala) => (
+                        <div key={escala.id} className="escala-card">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                                <div className="escala-date" style={{ marginBottom: 0 }}>
+                                    📅 {new Date(escala.date).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                </div>
+                                <div className="action-buttons">
+                                    <button className="btn btn-small btn-edit" onClick={() => {
+                                        setEditing(escala);
+                                        setForm(escala);
+                                        setShowModal(true);
+                                    }}>
+                                        Editar
+                                    </button>
+                                    <button className="btn btn-small btn-delete" onClick={() => handleDelete(escala.id)}>
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="escala-grid">
+                                <div className="escala-item">
+                                    <h4>🤝 Quebra-Gelo</h4>
+                                    <p>{escala.quebra_gelo || "A definir"}</p>
+                                </div>
+                                <div className="escala-item">
+                                    <h4>🎵 Louvor</h4>
+                                    <p>{escala.louvor || "A definir"}</p>
+                                </div>
+                                <div className="escala-item">
+                                    <h4>🍰 Lanche</h4>
+                                    <p>{escala.lanche || "A definir"}</p>
+                                </div>
+                                <div className="escala-item">
+                                    <h4>📱 Mídia</h4>
+                                    <p>{escala.midia || "A definir"}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {showModal && (
+                        <div className="modal" onClick={() => { setShowModal(false); resetForm(); }}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <h2 style={{ marginBottom: '30px', color: 'var(--verde-raiz)' }}>
+                                    {editing ? 'Editar Escala' : 'Nova Escala'}
+                                </h2>
+
+                                <div className="form-group">
+                                    <label>Data da Célula:</label>
+                                    <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Quebra-Gelo:</label>
+                                    <input type="text" value={form.quebra_gelo} onChange={(e) => setForm({ ...form, quebra_gelo: e.target.value })} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Louvor:</label>
+                                    <input type="text" value={form.louvor} onChange={(e) => setForm({ ...form, louvor: e.target.value })} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Lanche:</label>
+                                    <input type="text" value={form.lanche} onChange={(e) => setForm({ ...form, lanche: e.target.value })} />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Mídia:</label>
+                                    <input type="text" value={form.midia} onChange={(e) => setForm({ ...form, midia: e.target.value })} />
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '10px', marginTop: '30px' }}>
+                                    <button className="btn btn-primary" onClick={handleSave} style={{ flex: 1 }}>Salvar</button>
+                                    <button className="btn btn-secondary" onClick={() => { setShowModal(false); resetForm(); }} style={{ flex: 1 }}>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Componente de Fotos
+        function PhotosTab({ photos, supabase, loadAllData, showMessage }) {
+            const [form, setForm] = useState({ url: '', caption: '' });
+
+            const handleAdd = async () => {
+                if (!form.url || !form.caption) {
+                    showMessage('Preencha URL e legenda', 'error');
+                    return;
+                }
+                try {
+                    await supabase.from('photos').insert([form]);
+                    showMessage('Foto adicionada com sucesso!');
+                    setForm({ url: '', caption: '' });
+                    await loadAllData();
+                } catch (error) {
+                    showMessage('Erro ao adicionar foto', 'error');
+                }
+            };
+
+            const handleDelete = async (id) => {
+                try {
+                    await supabase.from('photos').delete().eq('id', id);
+                    showMessage('Foto excluída com sucesso!');
+                    await loadAllData();
+                } catch (error) {
+                    showMessage('Erro ao excluir foto', 'error');
+                }
+            };
+
+            return (
+                <div>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Gerenciar Fotos</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr auto', gap: '10px', marginBottom: '30px' }}>
+                        <input
+                            type="text"
+                            placeholder="URL da imagem"
+                            value={form.url}
+                            onChange={(e) => setForm({ ...form, url: e.target.value })}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Legenda"
+                            value={form.caption}
+                            onChange={(e) => setForm({ ...form, caption: e.target.value })}
+                            style={{ padding: '12px', borderRadius: '8px', border: '2px solid var(--bege)' }}
+                        />
+                        <button className="btn btn-primary" onClick={handleAdd}>Adicionar</button>
+                    </div>
+
+                    <div className="photos-grid">
+                        {photos.map((photo) => (
+                            <div key={photo.id} className="photo-card">
+                                <img src={photo.url} alt={photo.caption} />
+                                <div className="photo-caption">
+                                    {photo.caption}
+                                    <button className="btn btn-small btn-delete" onClick={() => handleDelete(photo.id)} style={{ marginTop: '10px', width: '100%' }}>
+                                        Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Componente de Presença
+        function AttendanceTab({ members, attendances, supabase, loadAllData, showMessage }) {
+            const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+            const [attendanceList, setAttendanceList] = useState([]);
+            const [visitors, setVisitors] = useState('');
+
+            useEffect(() => {
+                loadAttendanceForDate();
+            }, [selectedDate]);
+
+            const loadAttendanceForDate = async () => {
+                const existing = attendances.find(a => a.date === selectedDate);
+                if (existing) {
+                    setAttendanceList(existing.present_members || []);
+                    setVisitors(existing.visitors || '');
+                } else {
+                    setAttendanceList([]);
+                    setVisitors('');
+                }
+            };
+
+            const toggleAttendance = (memberId) => {
+                if (attendanceList.includes(memberId)) {
+                    setAttendanceList(attendanceList.filter(id => id !== memberId));
+                } else {
+                    setAttendanceList([...attendanceList, memberId]);
+                }
+            };
+
+            const handleSave = async () => {
+                try {
+                    const existing = attendances.find(a => a.date === selectedDate);
+                    const data = {
+                        date: selectedDate,
+                        present_members: attendanceList,
+                        visitors: visitors
+                    };
+
+                    if (existing) {
+                        await supabase.from('attendances').update(data).eq('id', existing.id);
+                    } else {
+                        await supabase.from('attendances').insert([data]);
+                    }
+
+                    showMessage('Presença salva com sucesso!');
+                    await loadAllData();
+                } catch (error) {
+                    showMessage('Erro ao salvar presença', 'error');
+                }
+            };
+
+            return (
+                <div>
+                    <h3 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Chamada de Presença</h3>
+                    
+                    <div className="form-group">
+                        <label>Data da Célula:</label>
+                        <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={(e) => setSelectedDate(e.target.value)}
+                        />
+                    </div>
+
+                    <h4 style={{ marginTop: '30px', marginBottom: '15px', color: 'var(--verde-raiz)' }}>
+                        Membros Cadastrados
+                    </h4>
+
+                    <div className="attendance-grid">
+                        {members.map(member => (
+                            <div
+                                key={member.id}
+                                className={`attendance-card ${attendanceList.includes(member.id) ? 'present' : 'absent'}`}
+                                onClick={() => toggleAttendance(member.id)}
+                            >
+                                <span style={{ fontSize: '1.5em' }}>
+                                    {attendanceList.includes(member.id) ? '✅' : '❌'}
+                                </span>
+                                <div>
+                                    <strong>{member.name}</strong>
+                                    <div style={{ fontSize: '0.9em', opacity: 0.7 }}>{member.type}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="form-group" style={{ marginTop: '30px' }}>
+                        <label>Visitantes (separe por vírgula):</label>
+                        <textarea
+                            value={visitors}
+                            onChange={(e) => setVisitors(e.target.value)}
+                            placeholder="Ex: João Silva, Maria Santos"
+                            rows="3"
+                        />
+                    </div>
+
+                    <button className="btn btn-primary" onClick={handleSave} style={{ marginTop: '20px' }}>
+                        Salvar Presença
+                    </button>
+                </div>
+            );
+        }
+
+        // Componente de Relatórios
+        function ReportsTab({ members, attendances }) {
+            const calculateStats = () => {
+                const stats = {
+                    totalMembers: members.filter(m => m.type === 'Membro').length,
+                    totalFA: members.filter(m => m.type === 'FA').length,
+                    totalMeetings: attendances.length,
+                    avgAttendance: 0,
+                    avgMembers: 0,
+                    avgFA: 0,
+                    avgVisitors: 0,
+                    memberAttendance: {}
+                };
+
+                if (attendances.length > 0) {
+                    let totalPresent = 0;
+                    let totalFAPresent = 0;
+                    let totalVisitors = 0;
+
+                    attendances.forEach(att => {
+                        const presentCount = att.present_members?.length || 0;
+                        totalPresent += presentCount;
+
+                        // Contar FA's presentes
+                        const faPresent = att.present_members?.filter(id => {
+                            const member = members.find(m => m.id === id);
+                            return member && member.type === 'FA';
+                        }).length || 0;
+                        totalFAPresent += faPresent;
+
+                        // Contar visitantes
+                        const visitorsList = att.visitors?.split(',').filter(v => v.trim()).length || 0;
+                        totalVisitors += visitorsList;
+
+                        // Atualizar presença individual
+                        att.present_members?.forEach(memberId => {
+                            if (!stats.memberAttendance[memberId]) {
+                                stats.memberAttendance[memberId] = 0;
+                            }
+                            stats.memberAttendance[memberId]++;
+                        });
+                    });
+
+                    stats.avgAttendance = (totalPresent / attendances.length).toFixed(1);
+                    stats.avgMembers = ((totalPresent - totalFAPresent) / attendances.length).toFixed(1);
+                    stats.avgFA = (totalFAPresent / attendances.length).toFixed(1);
+                    stats.avgVisitors = (totalVisitors / attendances.length).toFixed(1);
+                }
+
+                return stats;
+            };
+
+            const stats = calculateStats();
+
+            return (
+                <div>
+                    <h3 style={{ marginBottom: '30px', color: 'var(--verde-raiz)' }}>📊 Relatórios e Estatísticas</h3>
+
+                    <h4 style={{ marginBottom: '20px', color: 'var(--verde-raiz)' }}>Médias Gerais</h4>
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <h3>{stats.avgAttendance}</h3>
+                            <p>Média de Presença</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.avgMembers}</h3>
+                            <p>Média Membros</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.avgFA}</h3>
+                            <p>Média FA's</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.avgVisitors}</h3>
+                            <p>Média Visitantes</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.totalMeetings}</h3>
+                            <p>Total de Reuniões</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.totalMembers}</h3>
+                            <p>Total de Membros</p>
+                        </div>
+                    </div>
+
+                    <h4 style={{ marginTop: '40px', marginBottom: '20px', color: 'var(--verde-raiz)' }}>
+                        Presença por Membro
+                    </h4>
+                    <div className="members-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Tipo</th>
+                                    <th>Presenças</th>
+                                    <th>% de Presença</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {members.map(member => {
+                                    const presences = stats.memberAttendance[member.id] || 0;
+                                    const percentage = stats.totalMeetings > 0 
+                                        ? ((presences / stats.totalMeetings) * 100).toFixed(1)
+                                        : 0;
+                                    return (
+                                        <tr key={member.id}>
+                                            <td>{member.name}</td>
+                                            <td>{member.type}</td>
+                                            <td>{presences} de {stats.totalMeetings}</td>
+                                            <td>
+                                                <strong style={{ color: percentage >= 75 ? '#4caf50' : percentage >= 50 ? '#ff9800' : '#f44336' }}>
+                                                    {percentage}%
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 style={{ marginTop: '40px', marginBottom: '20px', color: 'var(--verde-raiz)' }}>
+                        Histórico de Reuniões
+                    </h4>
+                    <div className="members-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Presentes</th>
+                                    <th>Membros</th>
+                                    <th>FA's</th>
+                                    <th>Visitantes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {attendances.map(att => {
+                                    const presentCount = att.present_members?.length || 0;
+                                    const faCount = att.present_members?.filter(id => {
+                                        const member = members.find(m => m.id === id);
+                                        return member && member.type === 'FA';
+                                    }).length || 0;
+                                    const memberCount = presentCount - faCount;
+                                    const visitorsCount = att.visitors?.split(',').filter(v => v.trim()).length || 0;
+
+                                    return (
+                                        <tr key={att.id}>
+                                            <td>{new Date(att.date).toLocaleDateString('pt-BR')}</td>
+                                            <td><strong>{presentCount}</strong></td>
+                                            <td>{memberCount}</td>
+                                            <td>{faCount}</td>
+                                            <td>{visitorsCount}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
