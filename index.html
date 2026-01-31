@@ -224,20 +224,28 @@
         }
 
         .escala-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            border-top: 4px solid var(--azul-claro);
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px var(--sombra);
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(30, 64, 175, 0.12);
+            border: none;
+            position: relative;
         }
 
+        .escala-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--azul-principal), var(--azul-claro));
+            border-radius: 18px 0 0 18px;
+        }
+        
         .escala-date {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8em;
-            color: var(--azul-principal);
-            margin-bottom: 20px;
-            font-weight: 700;
+            font-size: 1.9em;
+            margin-bottom: 25px;
         }
 
         .escala-grid {
@@ -250,12 +258,14 @@
             background: var(--cinza-bg);
             padding: 15px;
             border-radius: 10px;
+            align-items: center;
         }
 
         .escala-item h4 {
             color: var(--azul-principal);
             font-size: 1em;
             margin-bottom: 8px;
+            align-items: center;
         }
 
         .escala-item p {
@@ -696,7 +706,7 @@
                 return (
                     <div className="container">
                         <div className="loading">
-                            <h2>🌱 Carregando Célula Raízes...</h2>
+                            <h2>Carregando Célula Raízes...</h2>
                         </div>
                     </div>
                 );
@@ -706,7 +716,7 @@
                 return (
                     <div className="container">
                         <div className="header">
-                            <h1>Célula Raízes 🌱</h1>
+                            <h1>Célula Raízes</h1>
                         </div>
                         <div className="error">
                             <strong>⚠️ Erro de Configuração</strong>
@@ -773,17 +783,8 @@
             return (
                 <div className="container">
                     <div className="header">
-                        <h1>Célula Raízes 🌱</h1>
-                        <div className="verse">
-                            "Bendito o homem que confia no Senhor e cuja esperança é o Senhor. Porque ele é como a árvore plantada junto às águas, que estende as suas raízes para o ribeiro e não receia quando vem o calor, mas a sua folha fica verde; e, no ano de sequidão, não se perturba, nem deixa de dar fruto."
-                            <span className="verse-ref">Jeremias 17:7-8</span>
-                        </div>
-                        <div className="verse" style={{ marginTop: '20px' }}>
-                            "Portanto, assim como recebestes Cristo Jesus, o Senhor, assim andai nele, arraigados e edificados nele e confirmados na fé, assim como fostes ensinados, crescendo em ações de graças."
-                            <span className="verse-ref">Colossenses 2:6-7</span>
-                        </div>
-                    </div>
-
+                        <h1>Célula Raízes</h1>
+                        
                     {birthdaysThisMonth.length > 0 && (
                         <div className="alert-birthday">
                             <h3>🎂 Aniversariantes do Mês! 🎉</h3>
@@ -812,6 +813,16 @@
                         <button className="btn btn-admin" onClick={() => setShowLogin(true)}>
                             🔐 Admin
                         </button>
+                    </div>
+
+                    <div className="verse">
+                            "Bendito o homem que confia no Senhor e cuja esperança é o Senhor. Porque ele é como a árvore plantada junto às águas, que estende as suas raízes para o ribeiro e não receia quando vem o calor, mas a sua folha fica verde; e, no ano de sequidão, não se perturba, nem deixa de dar fruto."
+                            <span className="verse-ref">Jeremias 17:7-8</span>
+                        </div>
+                        <div className="verse" style={{ marginTop: '20px' }}>
+                            "Portanto, assim como recebestes Cristo Jesus, o Senhor, assim andai nele, arraigados e edificados nele e confirmados na fé, assim como fostes ensinados, crescendo em ações de graças."
+                            <span className="verse-ref">Colossenses 2:6-7</span>
+                        </div>
                     </div>
 
                     {currentView === "birthdays" && (
@@ -899,7 +910,7 @@
 
                     {currentView === "photos" && (
                         <div className="section">
-                            <h2>📸 Fotos das Últimas Células</h2>
+                            <h2>📸 Nossas Fotos</h2>
                             {photos.length === 0 ? (
                                 <p>Nenhuma foto publicada ainda.</p>
                             ) : (
@@ -1694,6 +1705,7 @@
     </script>
 </body>
 </html>
+
 
 
 
